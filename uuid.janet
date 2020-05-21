@@ -9,8 +9,13 @@
     "%s%s%s%s-%s%s-%s%s-%s%s-%s%s%s%s%s%s"
     (splice hex-list)))
 
+(defn- update-byte [idx f bytes]
+  (let [byte (get bytes idx)]
+    (put bytes idx (f byte))))
+
 (defn new []
-  (var rand-bytes (os/cryptorand 16))
-  (put rand-bytes 6 (bor 0x40 (band 0x0f (get rand-bytes 6))))
-  (put rand-bytes 8 (bor 0x80 (band 0x3f (get rand-bytes 8))))
-  (-> (map hex-format rand-bytes) uuid-format))
+  (->> (os/cryptorand 16)
+       (update-byte 6 (fn [x] (bor 0x40 (band 0x0f x))))
+       (update-byte 8 (fn [x] (bor 0x80 (band 0x3f x))))
+       (map hex-format)
+       uuid-format))

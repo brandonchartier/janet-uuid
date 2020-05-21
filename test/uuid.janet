@@ -1,22 +1,26 @@
 (import ../uuid)
 
 (def uuid-grammar
-  ~{:hex (range "09" "af")
-    :hyphen "-"
-    :time_low (repeat 8 :hex)
-    :time_mid (repeat 4 :hex)
-    :time_hi_and_version (* "4" (repeat 3 :hex))
-    :clock_seq_hi_and_res (* (set "89ab") (repeat 3 :hex))
-    :node (repeat 12 :hex)
-    :main (* :time_low
-             :hyphen
-             :time_mid
-             :hyphen
-             :time_hi_and_version
-             :hyphen
-             :clock_seq_hi_and_res
-             :hyphen
-             :node)})
+  (peg/compile
+    ~{:hex-digit (range "09" "af" "AF")
+      :hex-octet (* :hex-digit :hex-digit)
+      :time-low (repeat 4 :hex-octet)
+      :time-mid (repeat 2 :hex-octet)
+      :time-hi-and-version (* "4" (repeat 3 :hex-digit))
+      :clock-seq-hi-and-res (* (set "89ab") :hex-digit)
+      :clock-seq-low :hex-octet
+      :node (repeat 6 :hex-octet)
+      :main (* :time-low
+               "-"
+               :time-mid
+               "-"
+               :time-hi-and-version
+               "-"
+               :clock-seq-hi-and-res
+               :clock-seq-low
+               "-"
+               :node)}))
 
-(def result (peg/match uuid-grammar (uuid/new)))
-(assert (not= result nil))
+(loop [_ :range [0 100]]
+  (let [result (peg/match uuid-grammar (uuid/new))]
+    (assert (not= result nil))))
