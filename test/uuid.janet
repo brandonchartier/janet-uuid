@@ -2,7 +2,7 @@
 
 (def uuid-grammar
   (peg/compile
-    ~{:hex-digit (range "09" "af" "AF")
+    ~{:hex-digit (range "09" "af")
       :hex-octet (* :hex-digit :hex-digit)
       :time-low (repeat 4 :hex-octet)
       :time-mid (repeat 2 :hex-octet)
