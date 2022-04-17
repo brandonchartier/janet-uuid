@@ -8,4 +8,5 @@
 (import uuid)
 
 (uuid/new) # "b65bd5a4-40c0-4a39-ab9a-8956707d3450"
+(uuid/valid? "b65bd5a4-40c0-4a39-ab9a-8956707d3450") # true
 ```
