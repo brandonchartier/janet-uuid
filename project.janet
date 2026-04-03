@@ -1,8 +1,8 @@
 (declare-project
   :name "uuid"
-  :description "A UUID v4 implementation"
+  :description "UUID v4 and v7 generation"
   :author "Brandon Chartier"
-  :license "MIT"
+  :license "GPL-3.0"
   :url "https://github.com/brandonchartier/janet-uuid"
   :repo "git+https://github.com/brandonchartier/janet-uuid.git")
 
