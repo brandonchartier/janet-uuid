@@ -4,7 +4,7 @@
       :hex-octet (* :hex-digit :hex-digit)
       :time-low (repeat 4 :hex-octet)
       :time-mid (repeat 2 :hex-octet)
-      :time-hi-and-version (* (set "47") (repeat 3 :hex-digit))
+      :time-hi-and-version (* (<- :hex-digit) (repeat 3 :hex-digit))
       :clock-seq-hi-and-res (* (set "89ab") :hex-digit)
       :clock-seq-low :hex-octet
       :node (repeat 6 :hex-octet)
@@ -55,6 +55,12 @@
          (map hex-format)
          uuid-format)))
 
+(def nil-uuid "00000000-0000-0000-0000-000000000000")
+
 (defn valid? [str]
   (let [result (peg/match uuid-grammar str)]
     (not= result nil)))
+
+(defn version [str]
+  (when-let [result (peg/match uuid-grammar str)]
+    (scan-number (result 0))))

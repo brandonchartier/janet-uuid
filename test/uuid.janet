@@ -20,4 +20,12 @@
   (assert (>= ts before) "v7 timestamp not before generation")
   (assert (<= ts after) "v7 timestamp not after generation"))
 
+# nil-uuid
+(assert (= uuid/nil-uuid "00000000-0000-0000-0000-000000000000") "nil-uuid value")
+
+# version
+(assert (= (uuid/version (uuid/v4)) 4) "v4 version")
+(assert (= (uuid/version (uuid/v7)) 7) "v7 version")
+(assert (nil? (uuid/version "not-a-uuid")) "version returns nil for invalid")
+
 (print "All tests passed.")
